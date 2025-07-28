@@ -52,11 +52,11 @@
 </head>
 <body class="antialiased">
 
-<div class="flex h-screen bg-gray-100 dark:bg-gray-900">
-    <aside class="sidebar w-64 flex-shrink-0 p-4 border-r border-gray-200 dark:border-gray-700 flex flex-col">
+<div class="flex flex-col md:flex-row min-h-screen">
+    <aside class="sidebar w-full md:w-64 flex-shrink-0 p-4 border-b md:border-r md:border-b-0 border-gray-200 dark:border-gray-700 flex flex-col">
         <div class="flex items-center mb-8">
             <svg class="h-8 w-8 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
             </svg>
             <h1 class="google-sans text-xl font-bold ml-2 text-gray-800 dark:text-gray-100">-=-</h1>
         </div>
@@ -69,24 +69,24 @@
         </nav>
         <div class="mt-auto p-2">
              <label for="dark-mode-toggle" class="flex items-center cursor-pointer">
-                <div class="relative">
-                    <input type="checkbox" id="dark-mode-toggle" class="sr-only">
-                    <div class="toggle-bg block bg-gray-300 dark:bg-gray-600 w-11 h-6 rounded-full"></div>
-                    <div class="toggle-circle absolute left-1 top-1 bg-white w-4 h-4 rounded-full"></div>
-                </div>
-                <div class="ml-3 text-gray-700 dark:text-gray-300 font-medium">Useless Mode</div>
-            </label>
+                 <div class="relative">
+                     <input type="checkbox" id="dark-mode-toggle" class="sr-only">
+                     <div class="toggle-bg block bg-gray-300 dark:bg-gray-600 w-11 h-6 rounded-full"></div>
+                     <div class="toggle-circle absolute left-1 top-1 bg-white w-4 h-4 rounded-full"></div>
+                 </div>
+                 <div class="ml-3 text-gray-700 dark:text-gray-300 font-medium">Useless Mode</div>
+             </label>
         </div>
     </aside>
 
     <div class="flex-1 flex flex-col overflow-hidden">
-        <header class="p-6 border-b border-gray-200 dark:border-gray-700">
-            <h1 class="google-sans text-3xl font-bold text-gray-800 dark:text-gray-100">Survival Schedule</h1>
+        <header class="p-4 md:p-6 border-b border-gray-200 dark:border-gray-700">
+            <h1 class="google-sans text-2xl md:text-3xl font-bold text-gray-800 dark:text-gray-100">Survival Schedule</h1>
             <p class="mt-1 text-gray-600 dark:text-gray-400"> yup , I built a class timetable. 💀
 For what?? Vibes?? Anyway, slay I guess.
 But, I built this for some reason... probably so I actually go to class. 🤷‍♂️</p>
         </header>
-        <main id="schedule-container" class="flex-1 overflow-y-auto p-6">
+        <main id="schedule-container" class="flex-1 overflow-y-auto p-4 md:p-6">
             <div class="text-center text-gray-500">
                 <p>Loading...</p>
                 <p class="text-sm">(Probably pointless—something's broken, as usual. Just pretend something brilliant is happening... that's the magic.)</p>
@@ -161,8 +161,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function generateScheduleHTML(day) {
         const events = scheduleData[day];
         if (!events || events.length === 0) return generateWelcomeScreenHTML();
-
-        let timelineHTML = `<div class="relative pl-8"><div class="timeline-line absolute left-4 top-4 bottom-4 w-0.5"></div>`;
+        
+        // [MODIFIED] Adjusted timeline padding and dot positioning for mobile.
+        let timelineHTML = `<div class="relative pl-6 sm:pl-8"><div class="timeline-line absolute left-4 top-4 bottom-4 w-0.5"></div>`;
         events.forEach((event, index) => {
             const details = event.code ? courseDetails[event.code] : { title: event.title };
             const title = details.title || event.title;
@@ -171,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const cardColorClasses = { lecture: "border-l-4 border-blue-500", lab: "border-l-4 border-purple-500", break: "border-l-4 border-yellow-500", seminar: "border-l-4 border-pink-500" };
             timelineHTML += `
                 <div data-day="${day}" data-index="${index}" class="timeline-item relative mb-6">
-                    <div class="timeline-dot absolute -left-[29px] top-3 h-5 w-5 rounded-full"></div>
+                    <div class="timeline-dot absolute -left-[21px] sm:-left-[29px] top-3 h-5 w-5 rounded-full"></div>
                     <div class="timeline-card p-4 rounded-lg shadow-md ${cursorClass} ${cardColorClasses[event.type] || ''}">
                         <div class="flex items-start gap-4">
                             <div class="hidden sm:block mt-1">${icons[event.type] || icons.lecture}</div>
