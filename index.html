@@ -1,282 +1,207 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en" class=""> <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saurab; /</title>
+    <title>my Grand Plan for Academic Survival</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Chosen Palette: Calm Academia -->
-    <!-- Application Structure Plan: The SPA is designed with a user-centric, task-oriented approach based on the updated timetable. It retains the successful tabbed navigation for each day of the week (Mon-Fri), allowing for quick access to a specific day's schedule. Each day is presented as a clear, vertical timeline, an intuitive visualization for a schedule. Key interactions include clicking a course card on the timeline to open a detailed modal view containing the syllabus and learning outcomes. This "details-on-demand" approach keeps the main interface uncluttered while making comprehensive information easily accessible. This structure is optimal for common student tasks like checking the day's schedule or looking up details for a specific class. -->
-    <!-- Visualization & Content Choices: Report Info: Daily class schedule with detailed syllabus for each course. -> Goal: Organize, Inform, and allow quick look-up. -> Viz/Presentation Method: Interactive vertical timeline for each day, constructed with HTML/CSS (Tailwind). Course details are presented in a modal popup. -> Interaction: Tab clicks to switch between days. Course card clicks to show the details modal. -> Justification: A timeline is the most logical visualization for a schedule. Modals provide detailed information without cluttering the main view, which aligns with modern UI/UX principles for information architecture. -> Library/Method: Vanilla JavaScript for all interactions (tab switching, modal logic). Tailwind CSS for styling. No chart libraries are needed as the data is not quantitative. -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #fdfbf7;
+        /* I've heroically fixed the CSS. Please, hold your applause. */
+        :root {
+            --bg-light: #f8f9fa; --bg-dark: #202124;
+            --text-light: #202124; --text-dark: #e8eaed;
+            --card-light: #ffffff; --card-dark: #303134;
+            --border-light: #dadce0; --border-dark: #3c4043;
+            --primary-light: #1a73e8; --primary-dark: #8ab4f8;
+            --sidebar-bg-light: #e9eef6; --sidebar-bg-dark: #282a2d;
         }
-        .tab-active {
-            background-color: #0d9488;
-            color: #ffffff;
-            font-weight: 600;
-        }
-        .tab-inactive {
-            background-color: #f0fdfa;
-            color: #115e59;
-        }
-        .timeline-item:before {
-            content: '';
-            position: absolute;
-            top: 1rem;
-            left: -0.625rem;
-            width: 1.25rem;
-            height: 1.25rem;
-            border-radius: 9999px;
-            background-color: #ccfbf1;
-            border: 3px solid #0d9488;
-        }
-        .modal {
-            transition: opacity 0.3s ease;
-        }
-        .modal-content {
-            transition: transform 0.3s ease;
-        }
+        html.dark { color-scheme: dark; }
+        body { font-family: 'Roboto', sans-serif; background-color: var(--bg-light); color: var(--text-light); transition: background-color 0.3s ease, color 0.3s ease; }
+        html.dark body { background-color: var(--bg-dark); color: var(--text-dark); }
+        .google-sans { font-family: 'Google Sans', sans-serif; }
+        .sidebar { background-color: var(--sidebar-bg-light); }
+        html.dark .sidebar { background-color: var(--sidebar-bg-dark); }
+        .nav-link { transition: background-color 0.2s ease, color 0.2s ease; color: #3c4043; }
+        html.dark .nav-link { color: var(--text-dark); }
+        .nav-link:hover { background-color: rgba(0,0,0,0.05); }
+        html.dark .nav-link:hover { background-color: rgba(255,255,255,0.05); }
+        .nav-link.active { background-color: var(--primary-light); color: white !important; font-weight: 700; }
+        html.dark .nav-link.active { background-color: var(--primary-dark); color: var(--bg-dark) !important;}
+        .timeline-card { background-color: var(--card-light); border: 1px solid var(--border-light); transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        html.dark .timeline-card { background-color: var(--card-dark); border-color: var(--border-dark); }
+        .timeline-card:hover { transform: translateY(-4px); box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.1); }
+        html.dark .timeline-card:hover { box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.2); }
+        .timeline-line { background-color: var(--border-light); }
+        html.dark .timeline-line { background-color: var(--border-dark); }
+        .timeline-dot { background-color: var(--bg-light); border: 3px solid var(--primary-light); }
+        html.dark .timeline-dot { background-color: var(--bg-dark); border-color: var(--primary-dark); }
+        .modal-content { background-color: var(--card-light); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        html.dark .modal-content { background-color: var(--card-dark); }
+        .modal-header { background-color: var(--primary-light); }
+        html.dark .modal-header { background-color: var(--primary-dark); color: var(--bg-dark); }
+
+        /* FIXED DARK MODE TOGGLE - A monumental feat of engineering. */
+        .toggle-bg { transition: background-color 0.2s ease; }
+        .toggle-circle { transition: transform 0.2s ease; }
+        input:checked ~ .toggle-bg { background-color: var(--primary-light); }
+        html.dark input:checked ~ .toggle-bg { background-color: var(--primary-dark); }
+        input:checked ~ .toggle-bg .toggle-circle { transform: translateX(20px); }
     </style>
 </head>
-<body class="text-gray-800 antialiased">
+<body class="antialiased">
 
-    <div class="container mx-auto max-w-5xl p-4 sm:p-6 lg:p-8">
-        <header class="text-center mb-8">
-            <h1 class="text-3xl sm:text-4xl font-bold text-teal-800">Your Weekly Course Guide</h1>
-            <p class="mt-2 text-lg text-gray-600">An interactive guide to your academic schedule and syllabus.</p>
-        </header>
-
-        <div id="tabs-container" class="mb-8 bg-white rounded-xl shadow-md p-2 flex flex-wrap justify-center gap-2">
-            <button data-day="monday" class="tab-button flex-grow text-center px-4 py-3 rounded-lg transition-colors duration-300">Monday</button>
-            <button data-day="tuesday" class="tab-button flex-grow text-center px-4 py-3 rounded-lg transition-colors duration-300">Tuesday</button>
-            <button data-day="wednesday" class="tab-button flex-grow text-center px-4 py-3 rounded-lg transition-colors duration-300">Wednesday</button>
-            <button data-day="thursday" class="tab-button flex-grow text-center px-4 py-3 rounded-lg transition-colors duration-300">Thursday</button>
-            <button data-day="friday" class="tab-button flex-grow text-center px-4 py-3 rounded-lg transition-colors duration-300">Friday</button>
+<div class="flex h-screen bg-gray-100 dark:bg-gray-900">
+    <aside class="sidebar w-64 flex-shrink-0 p-4 border-r border-gray-200 dark:border-gray-700 flex flex-col">
+        <div class="flex items-center mb-8">
+            <svg class="h-8 w-8 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+            <h1 class="google-sans text-xl font-bold ml-2 text-gray-800 dark:text-gray-100">-=-</h1>
         </div>
+        <nav id="day-navigation" class="flex flex-col gap-2">
+            <a href="#" data-day="monday" class="nav-link text-lg font-medium p-3 rounded-lg flex items-center gap-3"><span class="w-2 h-2 bg-red-400 rounded-full"></span>Mon</a>
+            <a href="#" data-day="tuesday" class="nav-link text-lg font-medium p-3 rounded-lg flex items-center gap-3"><span class="w-2 h-2 bg-orange-400 rounded-full"></span>Tue</a>
+            <a href="#" data-day="wednesday" class="nav-link text-lg font-medium p-3 rounded-lg flex items-center gap-3"><span class="w-2 h-2 bg-yellow-400 rounded-full"></span>Wed</a>
+            <a href="#" data-day="thursday" class="nav-link text-lg font-medium p-3 rounded-lg flex items-center gap-3"><span class="w-2 h-2 bg-green-400 rounded-full"></span>Thu</a>
+            <a href="#" data-day="friday" class="nav-link text-lg font-medium p-3 rounded-lg flex items-center gap-3"><span class="w-2 h-2 bg-blue-400 rounded-full"></span>Fri</a>
+        </nav>
+        <div class="mt-auto p-2">
+             <label for="dark-mode-toggle" class="flex items-center cursor-pointer">
+                <div class="relative">
+                    <input type="checkbox" id="dark-mode-toggle" class="sr-only">
+                    <div class="toggle-bg block bg-gray-300 dark:bg-gray-600 w-11 h-6 rounded-full"></div>
+                    <div class="toggle-circle absolute left-1 top-1 bg-white w-4 h-4 rounded-full"></div>
+                </div>
+                <div class="ml-3 text-gray-700 dark:text-gray-300 font-medium">Useless Mode</div>
+            </label>
+        </div>
+    </aside>
 
-        <main id="schedule-container">
-            <!-- Schedule content will be injected here by JavaScript -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <header class="p-6 border-b border-gray-200 dark:border-gray-700">
+            <h1 class="google-sans text-3xl font-bold text-gray-800 dark:text-gray-100">Survival Schedule</h1>
+            <p class="mt-1 text-gray-600 dark:text-gray-400"> yup , I built a class timetable. 💀
+For what?? Vibes?? Anyway, slay I guess.
+But, I built this for some reason... probably so I actually go to class. 🤷‍♂️</p>
+        </header>
+        <main id="schedule-container" class="flex-1 overflow-y-auto p-6">
+            <div class="text-center text-gray-500">
+                <p>Loading...</p>
+                <p class="text-sm">(Probably pointless—something's broken, as usual. Just pretend something brilliant is happening... that's the magic.)</p>
+            </div>
         </main>
     </div>
+</div>
 
-    <!-- Modal Structure -->
-    <div id="courseModal" class="modal fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none">
-        <div class="modal-content bg-white w-full max-w-2xl max-h-[90vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col transform scale-95">
-            <div class="flex justify-between items-center p-5 bg-teal-600 text-white">
-                <h2 id="modalTitle" class="text-2xl font-bold">Course Details</h2>
-                <button id="closeModal" class="text-3xl font-light leading-none hover:text-teal-200 transition-colors">&times;</button>
+<div id="courseModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-opacity duration-300">
+    <div class="modal-content w-full max-w-2xl max-h-[90vh] rounded-xl shadow-2xl overflow-hidden flex flex-col transform scale-95">
+        <div class="modal-header flex justify-between items-center p-4 text-white">
+            <h2 id="modalTitle" class="google-sans text-2xl font-bold">Course Details</h2>
+            <button id="closeModal" class="text-3xl font-light leading-none hover:opacity-75 transition-opacity">&times;</button>
+        </div>
+        <div class="p-6 overflow-y-auto space-y-6">
+            <div>
+                <h3 class="font-bold text-lg text-blue-600 dark:text-blue-400">Venue</h3>
+                <p id="modalVenue" class="mt-1 text-gray-700 dark:text-gray-300"></p>
             </div>
-            <div class="p-6 overflow-y-auto">
-                <div class="mb-5">
-                    <h3 class="font-semibold text-lg text-teal-700">Venue</h3>
-                    <p id="modalVenue" class="text-gray-700"></p>
-                </div>
-                <div class="mb-5">
-                    <h3 class="font-semibold text-lg text-teal-700">Learning Outcomes</h3>
-                    <p id="modalOutcomes" class="text-gray-700 whitespace-pre-wrap"></p>
-                </div>
-                <div>
-                    <h3 class="font-semibold text-lg text-teal-700">Syllabus</h3>
-                    <div id="modalSyllabus" class="text-gray-700 whitespace-pre-wrap prose prose-sm"></div>
-                </div>
+            <div class="w-full h-px bg-gray-200 dark:bg-gray-700"></div>
+            <div>
+                <h3 class="font-bold text-lg text-blue-600 dark:text-blue-400">Learning Outcomes</h3>
+                <p id="modalOutcomes" class="mt-1 text-gray-700 dark:text-gray-300 whitespace-pre-wrap"></p>
+            </div>
+             <div class="w-full h-px bg-gray-200 dark:bg-gray-700"></div>
+            <div>
+                <h3 class="font-bold text-lg text-blue-600 dark:text-blue-400">Syllabus</h3>
+                <div id="modalSyllabus" class="mt-1 text-gray-700 dark:text-gray-300 whitespace-pre-wrap prose prose-sm dark:prose-invert"></div>
             </div>
         </div>
     </div>
+</div>
 
 
 <script>
-const courseDetails = {
-    "DSC 322": {
-        title: "Applied Regression Analysis",
-        outcomes: `Understand the theoretical foundations of various statistical models. Perform fitting of linear and nonlinear regression.`,
-        syllabus: `• Linear regression with one and multiple regressors, including estimation, tests, confidence regions, and simultaneous testing methods.\n• Model adequacy checking through analysis of residuals, lack of fit tests, and graphical checks for model assumptions.\n• Addressing issues like multicollinearity, outliers, leverage, and measures of influence.\n• Techniques for model selection (stepwise, forward, backward, best subset) and model validation.\n• Regression models with indicator variables, Polynomial regression models, and models with interaction terms.\n• Transformation of variables (Box-Cox method), Ridge's regression, and Weighted Regression.\n• Regression analysis for binary dependent variables and panel data.\n• An introduction to Generalized Linear Models.`
-    },
-    "MAT 314": {
-        title: "Numerical Analysis",
-        outcomes: `This introductory numerics course aims to make the students aware of various classical approximation schemes in order to solve algebraic equations and differential equations.`,
-        syllabus: `• Round off Errors and Computer Arithmetic.\n• Numerical solutions of nonlinear algebraic equations: Bisection, Secant and Newton’s method, fixed-point iteration.\n• Interpolation: Lagrange interpolation, divided differences, Hermite interpolation, splines.\n• Numerical differentiation, Richardson extrapolation.\n• Numerical integration: Trapezoidal, Simpson, Newton-Cotes, Gauss quadrature.\n• Solutions of linear algebraic equations: Direct methods (Gauss elimination), Iterative methods (Jacobi and Gauss-Siedel).\n• Computation of eigenvalues and eigenvectors: Power method, QR algorithm.\n• Initial Value Problems: Euler method, Higher order methods of Runge-Kutta type.\n• Boundary Value Problems: Finite differences.`
-    },
-    "MAT 313": {
-        title: "Linear Algebra",
-        outcomes: `This course provides an abstract treatment of linear algebra, focusing on decomposition and spectral theorems, along with topics relevant for applied and numerical methods.`,
-        syllabus: `• Invariant subspaces, direct sum decomposition, and invariant direct sums.\n• The primary decomposition theorem.\n• Nilpotent Operators and the Jordan Canonical form.\n• Inner product spaces, orthonormal basis, and the Gram-Schmidt process; adjoint operators.\n• The least squares problem, normal, unitary, and self-adjoint operators, and the spectral theorem for these operators.\n• Bilinear forms, including symmetric and skew-symmetric forms, and QR factorization.`
-    },
-    "MAT 322": {
-        title: "Mathematical Modelling",
-        outcomes: `This course introduces mathematical models of real-world problems, with examples from biology, chemistry, physics, and other fields.`,
-        syllabus: `• Introduction: Philosophy of modeling, model validation, and example problems.\n• Differential Equation Models: Population growth, drug dosage, predator-prey models, competing species, phase plane analysis, fixed points, and stability.\n• Modeling Process: Proportionality, geometric similarity, model fitting, and experimental, simulation, and discrete modeling.\n• Probabilistic Models: Monte Carlo methods, Markov Chain applications for problems in inventory, genetics, and Google's Page Rank algorithm.`
-    },
-    "MAT 303": {
-        title: "Metric Spaces",
-        outcomes: `To provide a thorough understanding of metric spaces and their topology, including advanced concepts like continuity, convergence, compactness, and the Riemann-Stieltjes integral.`,
-        syllabus: `• Properties and examples of Metric spaces and Normed vector spaces, including open, closed, and bounded subsets, Cauchy sequences, and completeness.\n• Compact and connected sets, continuous functions, uniform continuity, and equivalence of metrics.\n• The contraction principle, Baire category theorem, and the convergence of sequences and series of functions (pointwise and uniform).\n• Arzela-Ascoli theorem, functions of bounded variation, and the Riemann-Stieltjes' integral.\n• Approximation theorems by Weierstrass and Stone-Weierstrass.`
-    },
-    "MAT 308": {
-        title: "Mathematics Lab",
-        outcomes: `To familiarize students with the implementation of various numerical analysis techniques, especially numerical integration and solving linear systems.`,
-        syllabus: `The lab consists of weekly assignments covering:\n• Introduction to Python/MATLAB and computer arithmetic.\n• Root finding using Newton's method and fixed-point iteration.\n• Lagrange interpolation.\n• Numerical integration using Simpson's and Trapezoidal rules.\n• Solving linear systems using LU decomposition, Gauss-Seidel, and Jacobi methods.\n• Solving Initial Value Problems (IVPs) and Boundary Value Problems (BVPs).\n• Approximating eigenvalues and eigenvectors using the Power method.`
-    },
-    "DSC 324": {
-        title: "Machine Learning II",
-        outcomes: `Understanding Neural Network structures and learning. Understanding the deep learning algorithms for domains. Implementing deep learning algorithms to solve real-world problems.`,
-        syllabus: `• Introduction: Biological Neuron, Perceptron Learning Algorithm.\n• Feedforward Networks: Multilayer Perceptron, Gradient Descent, Backpropagation.\n• Deep Neural Networks: Optimization methods (Adagrad, Adam), regularization (dropout, batch normalization).\n• CNNs: Architectures, convolution/pooling layers, LeNet, AlexNet.\n• RNNs: Backpropagation through time, LSTM, GRU, Bidirectional models.\n• Generative Models: RBMs, Gibbs Sampling, Deep Boltzmann Machines.\n• Deep Unsupervised Learning: Autoencoders, VAEs, GANs.\n• Applications: Computer Vision (segmentation, object detection) and NLP (Word Vector Representations).`
-    },
-    "MAT 321": {
-        title: "Complex Analysis",
-        outcomes: `This advanced course covers Cauchy-Riemann equations, complex integration, singularities, and residue calculus, along with other major theorems in the field.`,
-        syllabus: `• Cauchy-Riemann equations, harmonic functions, and complex integration.\n• Homotopy version of Cauchy’s theorem, Cauchy’s integral formula, and Taylor series.\n• Zeros of analytic functions and the Open Mapping theorem.\n• Classification of singularities, Laurent’s series, the Residue Theorem, and Residue Calculus.\n• Maximum modulus principle, Schwarz lemma, and Weierstrass’ theorem.\n• Topology of uniform convergence, Montel’s theorem, and the Riemann Mapping theorem.`
-    },
-    "MAT 4101": {
-        title: "Discrete Mathematics",
-        outcomes: `To study discrete structures, develop logical thinking and mathematical proofs. Learn combinatorics, graph theory algorithms, and their practical applications.`,
-        syllabus: `• Set Theory and Boolean Algebras: Posets, Zorn's Lemma, inclusion-exclusion, Lattices.\n• Introduction to Logic: Predicate Logic, logical operators, proofs.\n• Combinatorics: Counting, Recurrence relations, Catalan numbers, Bell numbers, Stirling numbers.\n• Graph Theory: Paths, Cycles, Euler's solution, graph representations, Bipartite graphs, Trees, Spanning Subgraphs, Kruskal's Algorithm.\n• Advanced Topics: Mobius Inversion, Graph Colouring, Chromatic Number, Burnside's Lemma, Polya Theory, Matching Theory.\n• Geometric/Structural Graph Theory: Euler's polyhedron formula, Ramsey Theory, Regular graphs.`
-    },
-    "MAT 304": {
-        title: "Abstract Algebra",
-        outcomes: `The main focus is on abstract group theory and rings, with some basic knowledge of modules.`,
-        syllabus: `• Group actions, Orbit-Stabilizer theorem, Class Equation, Burnside's Counting lemma.\n• Sylow's theorems, solvable groups, and nilpotent groups.\n• Semi-direct products.\n• Euclidean domains, PIDs, UFDs, Gauss's theorem, Eisenstein Criterion.\n• Modules, fundamental theorem of finitely generated modules over a PID, Noetherian rings, Hilbert Basis Theorem.`
-    },
-    "HUM 312": {
-        title: "Humanities Course",
-        outcomes: "Details to be confirmed. This is a placeholder for your humanities elective.",
-        syllabus: "The syllabus for this course is not available in the provided documents. Please refer to your department's official course information for details."
-    }
-};
-
-const scheduleData = {
-    monday: [
-        { time: "8:00 AM - 9:00 AM", code: "DSC 322", venue: "Jupyter LHC", type: "lecture" },
-        { time: "9:00 AM - 10:00 AM", code: "MAT 314", venue: "Madhava", type: "lecture" },
-        { time: "10:00 AM - 11:00 AM", code: "MAT 313", venue: "LHC Venus", type: "lecture" },
-        { time: "11:00 AM - 12:00 PM", code: "MAT 322", venue: "LHC Venus", type: "lecture" },
-        { time: "12:00 PM - 1:00 PM", code: "MAT 303", venue: "LHC Venus", type: "lecture" },
-        { time: "1:00 PM - 2:00 PM", title: "Break", type: "break" },
-        { time: "2:00 PM - 4:00 PM", code: "MAT 308", venue: "SoM Lab", type: "lab" }
-    ],
-    tuesday: [
-        { time: "8:00 AM - 9:00 AM", code: "DSC 322", venue: "LHC Jupyter", type: "lecture" },
-        { time: "9:00 AM - 10:00 AM", title: "Break", type: "break" },
-        { time: "10:00 AM - 11:00 AM", code: "DSC 324", venue: "Madhava MSB", type: "lecture" },
-        { time: "11:00 AM - 12:00 PM", code: "MAT 321", venue: "PSB Seminar Hall", type: "lecture" },
-        { time: "12:00 PM - 1:00 PM", code: "MAT 4101", venue: "MSB Classroom", type: "lecture" },
-        { time: "1:00 PM - 2:00 PM", title: "Break", type: "break" },
-        { time: "2:00 PM - 3:00 PM", code: "MAT 304", venue: "LHC Venus", type: "lecture" },
-        { time: "3:00 PM - 4:00 PM", code: "MAT 308", venue: "SoM Lab", type: "lab" },
-        { time: "4:00 PM - 5:00 PM", title: "Departmental Activity", type: "seminar" },
-        { time: "5:00 PM - 6:00 PM", title: "Break", type: "break" },
-        { time: "6:00 PM - 7:00 PM", code: "HUM 312", venue: "N/A", type: "lecture" }
-    ],
-    wednesday: [
-        { time: "8:00 AM - 9:00 AM", code: "DSC 324", venue: "Jupyter", type: "lecture" },
-        { time: "9:00 AM - 10:00 AM", code: "MAT 314", venue: "Madhava", type: "lecture" },
-        { time: "10:00 AM - 11:00 AM", code: "MAT 313", venue: "Venus", type: "lecture" },
-        { time: "11:00 AM - 12:00 PM", code: "MAT 322", venue: "Venus", type: "lecture" },
-        { time: "12:00 PM - 1:00 PM", code: "MAT 303", venue: "Venus", type: "lecture" },
-        { time: "1:00 PM - 2:00 PM", title: "Break", type: "break" },
-        { time: "2:00 PM - 4:00 PM", code: "MAT 308", venue: "SoM Lab", type: "lab" },
-        { time: "4:00 PM - 5:00 PM", title: "Break", type: "break" },
-        { time: "5:00 PM - 6:00 PM", code: "MAT 4101", venue: "MSB Classroom", type: "lecture" },
-        { time: "6:00 PM - 7:00 PM", code: "HUM 312", venue: "N/A", title: "Humanities Course", type: "lecture" }
-    ],
-    thursday: [
-        { time: "8:00 AM - 9:00 AM", code: "DSC 322", venue: "Jupyter LHC", type: "lecture" },
-        { time: "9:00 AM - 10:00 AM", code: "MAT 314", venue: "Madhava", type: "lecture" },
-        { time: "10:00 AM - 11:00 AM", code: "MAT 313", venue: "LHC Venus", type: "lecture" },
-        { time: "11:00 AM - 12:00 PM", code: "MAT 322", venue: "LHC Venus", type: "lecture" },
-        { time: "12:00 PM - 1:00 PM", code: "MAT 303", venue: "LHC Venus", type: "lecture" },
-        { time: "1:00 PM - 2:00 PM", title: "Break", type: "break" },
-        { time: "2:00 PM - 3:00 PM", code: "MAT 304", venue: "LHC Venus", type: "lecture" },
-        { time: "3:00 PM - 4:00 PM", code: "MAT 308", venue: "SoM Lab", type: "lab" },
-        { time: "4:00 PM - 5:00 PM", code: "MAT 321", venue: "PSB Seminar Hall", type: "lecture" }
-    ],
-    friday: [
-        { time: "8:00 AM - 9:00 AM", code: "DSC 324", venue: "Madhava", type: "lecture" },
-        { time: "9:00 AM - 10:00 AM", code: "MAT 304", venue: "Venus LHC", type: "lecture" },
-        { time: "10:00 AM - 11:00 AM", code: "MAT 308", venue: "SoM Lab", type: "lab" },
-        { time: "11:00 AM - 12:00 PM", code: "MAT 321", venue: "PSB Seminar Hall", type: "lecture" },
-        { time: "12:00 PM - 1:00 PM", code: "MAT 4101", venue: "MSB Classroom", type: "lecture" },
-        { time: "1:00 PM - 2:00 PM", title: "Break", type: "break" },
-        { time: "2:00 PM - 4:00 PM", code: "MAT 308", venue: "SoM Lab", type: "lab" },
-        { time: "4:00 PM - 5:00 PM", title: "Break", type: "break" },
-        { time: "5:00 PM - 6:00 PM", title: "Colloquium", type: "seminar" }
-    ]
-};
-
-const icons = {
-    lecture: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-teal-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v11.494m-9-5.494h18" /></svg>`,
-    lab: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>`,
-    break: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 3v2c0 .6-.4 1-1 1H4a1 1 0 01-1-1V3M4 11h16M4 19h16" /></svg>`,
-    seminar: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>`
-};
+// The important data. Still untouched. I'm not a monster.
+const courseDetails = { "DSC 322":{title:"Applied Regression Analysis",outcomes:"Understand the theoretical foundations of various statistical models. Perform fitting of linear and nonlinear regression.",syllabus:"• Linear regression with one and multiple regressors, including estimation, tests, confidence regions, and simultaneous testing methods.\n• Model adequacy checking through analysis of residuals, lack of fit tests, and graphical checks for model assumptions.\n• Addressing issues like multicollinearity, outliers, leverage, and measures of influence.\n• Techniques for model selection (stepwise, forward, backward, best subset) and model validation.\n• Regression models with indicator variables, Polynomial regression models, and models with interaction terms.\n• Transformation of variables (Box-Cox method), Ridge's regression, and Weighted Regression.\n• Regression analysis for binary dependent variables and panel data.\n• An introduction to Generalized Linear Models."}, "MAT 314":{title:"Numerical Analysis",outcomes:"This introductory numerics course aims to make the students aware of various classical approximation schemes in order to solve algebraic equations and differential equations.",syllabus:"• Round off Errors and Computer Arithmetic.\n• Numerical solutions of nonlinear algebraic equations: Bisection, Secant and Newton’s method, fixed-point iteration.\n• Interpolation: Lagrange interpolation, divided differences, Hermite interpolation, splines.\n• Numerical differentiation, Richardson extrapolation.\n• Numerical integration: Trapezoidal, Simpson, Newton-Cotes, Gauss quadrature.\n• Solutions of linear algebraic equations: Direct methods (Gauss elimination), Iterative methods (Jacobi and Gauss-Siedel).\n• Computation of eigenvalues and eigenvectors: Power method, QR algorithm.\n• Initial Value Problems: Euler method, Higher order methods of Runge-Kutta type.\n• Boundary Value Problems: Finite differences."}, "MAT 313":{title:"Linear Algebra",outcomes:"This course provides an abstract treatment of linear algebra, focusing on decomposition and spectral theorems, along with topics relevant for applied and numerical methods.",syllabus:"• Invariant subspaces, direct sum decomposition, and invariant direct sums.\n• The primary decomposition theorem.\n• Nilpotent Operators and the Jordan Canonical form.\n• Inner product spaces, orthonormal basis, and the Gram-Schmidt process; adjoint operators.\n• The least squares problem, normal, unitary, and self-adjoint operators, and the spectral theorem for these operators.\n• Bilinear forms, including symmetric and skew-symmetric forms, and QR factorization."}, "MAT 322":{title:"Mathematical Modelling",outcomes:"This course introduces mathematical models of real-world problems, with examples from biology, chemistry, physics, and other fields.",syllabus:"• Introduction: Philosophy of modeling, model validation, and example problems.\n• Differential Equation Models: Population growth, drug dosage, predator-prey models, competing species, phase plane analysis, fixed points, and stability.\n• Modeling Process: Proportionality, geometric similarity, model fitting, and experimental, simulation, and discrete modeling.\n• Probabilistic Models: Monte Carlo methods, Markov Chain applications for problems in inventory, genetics, and Google's Page Rank algorithm."}, "MAT 303":{title:"Metric Spaces",outcomes:"To provide a thorough understanding of metric spaces and their topology, including advanced concepts like continuity, convergence, compactness, and the Riemann-Stieltjes integral.",syllabus:"• Properties and examples of Metric spaces and Normed vector spaces, including open, closed, and bounded subsets, Cauchy sequences, and completeness.\n• Compact and connected sets, continuous functions, uniform continuity, and equivalence of metrics.\n• The contraction principle, Baire category theorem, and the convergence of sequences and series of functions (pointwise and uniform).\n• Arzela-Ascoli theorem, functions of bounded variation, and the Riemann-Stieltjes' integral.\n• Approximation theorems by Weierstrass and Stone-Weierstrass."}, "MAT 308":{title:"Mathematics Lab",outcomes:"To familiarize students with the implementation of various numerical analysis techniques, especially numerical integration and solving linear systems.",syllabus:"The lab consists of weekly assignments covering:\n• Introduction to Python/MATLAB and computer arithmetic.\n• Root finding using Newton's method and fixed-point iteration.\n• Lagrange interpolation.\n• Numerical integration using Simpson's and Trapezoidal rules.\n• Solving linear systems using LU decomposition, Gauss-Seidel, and Jacobi methods.\n• Solving Initial Value Problems (IVPs) and Boundary Value Problems (BVPs).\n• Approximating eigenvalues and eigenvectors using the Power method."}, "DSC 324":{title:"Machine Learning II",outcomes:"Understanding Neural Network structures and learning. Understanding the deep learning algorithms for domains. Implementing deep learning algorithms to solve real-world problems.",syllabus:"• Introduction: Biological Neuron, Perceptron Learning Algorithm.\n• Feedforward Networks: Multilayer Perceptron, Gradient Descent, Backpropagation.\n• Deep Neural Networks: Optimization methods (Adagrad, Adam), regularization (dropout, batch normalization).\n• CNNs: Architectures, convolution/pooling layers, LeNet, AlexNet.\n• RNNs: Backpropagation through time, LSTM, GRU, Bidirectional models.\n• Generative Models: RBMs, Gibbs Sampling, Deep Boltzmann Machines.\n• Deep Unsupervised Learning: Autoencoders, VAEs, GANs.\n• Applications: Computer Vision (segmentation, object detection) and NLP (Word Vector Representations)."}, "MAT 321":{title:"Complex Analysis",outcomes:"This advanced course covers Cauchy-Riemann equations, complex integration, singularities, and residue calculus, along with other major theorems in the field.",syllabus:"• Cauchy-Riemann equations, harmonic functions, and complex integration.\n• Homotopy version of Cauchy’s theorem, Cauchy’s integral formula, and Taylor series.\n• Zeros of analytic functions and the Open Mapping theorem.\n• Classification of singularities, Laurent’s series, the Residue Theorem, and Residue Calculus.\n• Maximum modulus principle, Schwarz lemma, and Weierstrass’ theorem.\n• Topology of uniform convergence, Montel’s theorem, and the Riemann Mapping theorem."}, "MAT 4101":{title:"Discrete Mathematics",outcomes:"To study discrete structures, develop logical thinking and mathematical proofs. Learn combinatorics, graph theory algorithms, and their practical applications.",syllabus:"• Set Theory and Boolean Algebras: Posets, Zorn's Lemma, inclusion-exclusion, Lattices.\n• Introduction to Logic: Predicate Logic, logical operators, proofs.\n• Combinatorics: Counting, Recurrence relations, Catalan numbers, Bell numbers, Stirling numbers.\n• Graph Theory: Paths, Cycles, Euler's solution, graph representations, Bipartite graphs, Trees, Spanning Subgraphs, Kruskal's Algorithm.\n• Advanced Topics: Mobius Inversion, Graph Colouring, Chromatic Number, Burnside's Lemma, Polya Theory, Matching Theory.\n• Geometric/Structural Graph Theory: Euler's polyhedron formula, Ramsey Theory, Regular graphs."}, "MAT 304":{title:"Abstract Algebra",outcomes:"The main focus is on abstract group theory and rings, with some basic knowledge of modules.",syllabus:"• Group actions, Orbit-Stabilizer theorem, Class Equation, Burnside's Counting lemma.\n• Sylow's theorems, solvable groups, and nilpotent groups.\n• Semi-direct products.\n• Euclidean domains, PIDs, UFDs, Gauss's theorem, Eisenstein Criterion.\n• Modules, fundamental theorem of finitely generated modules over a PID, Noetherian rings, Hilbert Basis Theorem."}, "HUM 312":{title:"Humanities Course",outcomes:"Details to be confirmed. This is a placeholder for your humanities elective.",syllabus:"The syllabus for this course is not available in the provided documents. Please refer to your department's official course information for details."}};
+const scheduleData = { monday: [{ time: "8:00 AM - 9:00 AM", code: "DSC 322", venue: "Jupyter LHC", type: "lecture" }, { time: "9:00 AM - 10:00 AM", code: "MAT 314", venue: "Madhava", type: "lecture" }, { time: "10:00 AM - 11:00 AM", code: "MAT 313", venue: "LHC Venus", type: "lecture" }, { time: "11:00 AM - 12:00 PM", code: "MAT 322", venue: "LHC Venus", type: "lecture" }, { time: "12:00 PM - 1:00 PM", code: "MAT 303", venue: "LHC Venus", type: "lecture" }, { time: "1:00 PM - 2:00 PM", title: "Break", type: "break" }, { time: "2:00 PM - 4:00 PM", code: "MAT 308", venue: "SoM Lab", type: "lab" }], tuesday: [{ time: "8:00 AM - 9:00 AM", code: "DSC 322", venue: "LHC Jupyter", type: "lecture" }, { time: "9:00 AM - 10:00 AM", title: "Break", type: "break" }, { time: "10:00 AM - 11:00 AM", code: "DSC 324", venue: "Madhava MSB", type: "lecture" }, { time: "11:00 AM - 12:00 PM", code: "MAT 321", venue: "PSB Seminar Hall", type: "lecture" }, { time: "12:00 PM - 1:00 PM", code: "MAT 4101", venue: "MSB Classroom", type: "lecture" }, { time: "1:00 PM - 2:00 PM", title: "Break", type: "break" }, { time: "2:00 PM - 3:00 PM", code: "MAT 304", venue: "LHC Venus", type: "lecture" }, { time: "3:00 PM - 4:00 PM", code: "MAT 308", venue: "SoM Lab", type: "lab" }, { time: "4:00 PM - 5:00 PM", title: "Departmental Activity", type: "seminar" }, { time: "5:00 PM - 6:00 PM", title: "Break", type: "break" }, { time: "6:00 PM - 7:00 PM", code: "HUM 312", venue: "N/A", type: "lecture" }], wednesday: [{ time: "8:00 AM - 9:00 AM", code: "DSC 324", venue: "Jupyter", type: "lecture" }, { time: "9:00 AM - 10:00 AM", code: "MAT 314", venue: "Madhava", type: "lecture" }, { time: "10:00 AM - 11:00 AM", code: "MAT 313", venue: "Venus", type: "lecture" }, { time: "11:00 AM - 12:00 PM", code: "MAT 322", venue: "Venus", type: "lecture" }, { time: "12:00 PM - 1:00 PM", code: "MAT 303", venue: "Venus", type: "lecture" }, { time: "1:00 PM - 2:00 PM", title: "Break", type: "break" }, { time: "2:00 PM - 4:00 PM", code: "MAT 308", venue: "SoM Lab", type: "lab" }, { time: "4:00 PM - 5:00 PM", title: "Break", type: "break" }, { time: "5:00 PM - 6:00 PM", code: "MAT 4101", venue: "MSB Classroom", type: "lecture" }, { time: "6:00 PM - 7:00 PM", code: "HUM 312", venue: "N/A", title: "Humanities Course", type: "lecture" }], thursday: [{ time: "8:00 AM - 9:00 AM", code: "DSC 322", venue: "Jupyter LHC", type: "lecture" }, { time: "9:00 AM - 10:00 AM", code: "MAT 314", venue: "Madhava", "type": "lecture" }, { time: "10:00 AM - 11:00 AM", code: "MAT 313", venue: "LHC Venus", type: "lecture" }, { time: "11:00 AM - 12:00 PM", code: "MAT 322", venue: "LHC Venus", type: "lecture" }, { time: "12:00 PM - 1:00 PM", code: "MAT 303", venue: "LHC Venus", type: "lecture" }, { time: "1:00 PM - 2:00 PM", title: "Break", type: "break" }, { time: "2:00 PM - 3:00 PM", code: "MAT 304", venue: "LHC Venus", type: "lecture" }, { time: "3:00 PM - 4:00 PM", code: "MAT 308", venue: "SoM Lab", type: "lab" }, { time: "4:00 PM - 5:00 PM", code: "MAT 321", venue: "PSB Seminar Hall", type: "lecture" }], friday: [{ time: "8:00 AM - 9:00 AM", code: "DSC 324", venue: "Madhava", type: "lecture" }, { time: "9:00 AM - 10:00 AM", code: "MAT 304", venue: "Venus LHC", type: "lecture" }, { time: "10:00 AM - 11:00 AM", code: "MAT 308", venue: "SoM Lab", type: "lab" }, { time: "11:00 AM - 12:00 PM", code: "MAT 321", venue: "PSB Seminar Hall", type: "lecture" }, { time: "12:00 PM - 1:00 PM", code: "MAT 4101", venue: "MSB Classroom", type: "lecture" }, { time: "1:00 PM - 2:00 PM", title: "Break", type: "break" }, { time: "2:00 PM - 4:00 PM", code: "MAT 308", venue: "SoM Lab", type: "lab" }, { time: "4:00 PM - 5:00 PM", title: "Break", type: "break" }, { time: "5:00 PM - 6:00 PM", title: "Colloquium", type: "seminar" }] };
+const icons = { lecture: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v11.494m-9-5.494h18" /></svg>`, lab: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>`, break: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 3v2c0 .6-.4 1-1 1H4a1 1 0 01-1-1V3M4 11h16M4 19h16" /></svg>`, seminar: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>` };
 
 document.addEventListener('DOMContentLoaded', () => {
-    const tabsContainer = document.getElementById('tabs-container');
+    const dayNavigation = document.getElementById('day-navigation');
     const scheduleContainer = document.getElementById('schedule-container');
     const modal = document.getElementById('courseModal');
     const modalContent = modal.querySelector('.modal-content');
     const closeModalBtn = document.getElementById('closeModal');
-    
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+
+    // Here are your useless widgets. You're welcome.
+    function generateWelcomeScreenHTML() {
+        return `
+            <div class="text-center p-8">
+                <h2 class="google-sans text-2xl font-bold mb-2">It's a free day. Miracles do happen.</h2>
+                <p class="text-gray-600 dark:text-gray-400 mb-8">Here are some completely arbitrary metrics to make you feel productive.</p>
+                <div class="grid md:grid-cols-2 gap-6 text-left">
+                    <div class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700">
+                        <h3 class="font-bold text-lg text-purple-600 dark:text-purple-400">Useless Fun Fact</h3>
+                        <p class="mt-2">A day on Venus is longer than a year on Venus. Think about that next time you feel your day is dragging.</p>
+                    </div>
+                    <div class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700">
+                        <h3 class="font-bold text-lg text-green-600 dark:text-green-400">Productivity Score™</h3>
+                        <p class="mt-2 text-sm">Your current productivity is... <span class="font-bold">42%</span>. Why? Because the number looked nice.</p>
+                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 mt-2">
+                            <div class="bg-green-500 h-2.5 rounded-full" style="width: 42%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
     function generateScheduleHTML(day) {
-        const events = scheduleData[day.toLowerCase()];
-        if (!events) return '';
+        const events = scheduleData[day];
+        if (!events || events.length === 0) return generateWelcomeScreenHTML();
 
-        let timelineHTML = `<div id="${day.toLowerCase()}-schedule" class="schedule-day space-y-2">
-                                <div class="relative border-l-2 border-teal-200 ml-4 pl-8">`;
-
+        let timelineHTML = `<div class="relative pl-8"><div class="timeline-line absolute left-4 top-4 bottom-4 w-0.5"></div>`;
         events.forEach((event, index) => {
             const details = event.code ? courseDetails[event.code] : { title: event.title };
             const title = details.title || event.title;
-            const isClickable = event.code && courseDetails[event.code];
-            const cursorClass = isClickable ? 'cursor-pointer hover:bg-teal-50' : '';
-            const cardBg = event.type === 'break' ? 'bg-amber-50' : 'bg-white';
-
+            const isClickable = !!event.code;
+            const cursorClass = isClickable ? 'cursor-pointer' : 'cursor-default';
+            const cardColorClasses = { lecture: "border-l-4 border-blue-500", lab: "border-l-4 border-purple-500", break: "border-l-4 border-yellow-500", seminar: "border-l-4 border-pink-500" };
             timelineHTML += `
-                <div data-day="${day.toLowerCase()}" data-index="${index}" class="timeline-item relative p-4 rounded-lg shadow-sm transition-all duration-300 ${cursorClass} ${cardBg}">
-                    <div class="flex items-center gap-4">
-                        <div class="hidden sm:block">${icons[event.type] || icons.lecture}</div>
-                        <div class="flex-grow">
-                            <p class="font-semibold text-gray-500">${event.time}</p>
-                            <h3 class="text-xl font-bold ${event.type === 'lecture' ? 'text-teal-800' : event.type === 'lab' ? 'text-indigo-800' : event.type === 'seminar' ? 'text-rose-800' : 'text-amber-800'}">${title}</h3>
-                            ${event.code ? `<p class="text-sm text-gray-500">${event.code} &bull; ${event.venue}</p>` : ''}
+                <div data-day="${day}" data-index="${index}" class="timeline-item relative mb-6">
+                    <div class="timeline-dot absolute -left-[29px] top-3 h-5 w-5 rounded-full"></div>
+                    <div class="timeline-card p-4 rounded-lg shadow-md ${cursorClass} ${cardColorClasses[event.type] || ''}">
+                        <div class="flex items-start gap-4">
+                            <div class="hidden sm:block mt-1">${icons[event.type] || icons.lecture}</div>
+                            <div class="flex-grow">
+                                <p class="font-bold text-gray-500 dark:text-gray-400">${event.time}</p>
+                                <h3 class="google-sans text-xl font-bold text-gray-900 dark:text-gray-100">${title}</h3>
+                                ${event.code ? `<p class="text-sm text-gray-600 dark:text-gray-400">${event.code} &bull; ${event.venue}</p>` : `<p class="text-sm text-gray-600 dark:text-gray-400">Eat. Sleep. Or just stare at a wall.</p>`}
+                            </div>
                         </div>
                     </div>
                 </div>`;
         });
-
-        timelineHTML += `</div></div>`;
+        timelineHTML += `</div>`;
         return timelineHTML;
     }
 
-    function switchTab(day) {
-        document.querySelectorAll('.tab-button').forEach(btn => {
-            if (btn.dataset.day === day) {
-                btn.classList.add('tab-active');
-                btn.classList.remove('tab-inactive');
-            } else {
-                btn.classList.remove('tab-active');
-                btn.classList.add('tab-inactive');
-            }
-        });
-        
+    function switchDay(day) {
+        document.querySelectorAll('#day-navigation .nav-link').forEach(link => link.classList.toggle('active', link.dataset.day === day));
         scheduleContainer.innerHTML = generateScheduleHTML(day);
         addCardEventListeners();
     }
 
     function showModal(day, index) {
         const event = scheduleData[day][index];
-        const details = event.code ? courseDetails[event.code] : null;
-        if (!details) return;
-
+        if (!event.code) return;
+        const details = courseDetails[event.code];
         document.getElementById('modalTitle').textContent = details.title;
-        document.getElementById('modalVenue').textContent = event.venue || 'N/A';
+        document.getElementById('modalVenue').textContent = event.venue || 'The ether';
         document.getElementById('modalOutcomes').textContent = details.outcomes;
         document.getElementById('modalSyllabus').textContent = details.syllabus;
-        
         modal.classList.remove('opacity-0', 'pointer-events-none');
         modalContent.classList.remove('scale-95');
     }
@@ -288,32 +213,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function addCardEventListeners() {
         document.querySelectorAll('.timeline-item').forEach(card => {
-            card.addEventListener('click', () => {
-                const day = card.dataset.day;
-                const index = parseInt(card.dataset.index, 10);
-                showModal(day, index);
-            });
+            card.addEventListener('click', () => showModal(card.dataset.day, parseInt(card.dataset.index, 10)));
         });
     }
+    
+    // The now-functional dark mode logic. A true triumph.
+    function setDarkMode(isDark) {
+        localStorage.setItem('darkMode', isDark);
+        document.documentElement.classList.toggle('dark', isDark);
+        darkModeToggle.checked = isDark;
+    }
 
-    tabsContainer.addEventListener('click', (e) => {
-        if (e.target.matches('.tab-button')) {
-            switchTab(e.target.dataset.day);
-        }
+    darkModeToggle.addEventListener('change', () => setDarkMode(darkModeToggle.checked));
+
+    dayNavigation.addEventListener('click', (e) => {
+        e.preventDefault();
+        const link = e.target.closest('.nav-link');
+        if (link) switchDay(link.dataset.day);
     });
 
     closeModalBtn.addEventListener('click', hideModal);
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            hideModal();
-        }
-    });
+    modal.addEventListener('click', (e) => { if (e.target === modal) hideModal(); });
 
-    // Initial load
-    const today = new Date().getDay();
+    // Initial setup.
+    const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+    setDarkMode(savedDarkMode);
+    const todayIndex = new Date().getDay();
     const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-    const currentDay = (today > 0 && today < 6) ? days[today] : 'monday';
-    switchTab(currentDay);
+    const currentDay = (todayIndex > 0 && todayIndex < 6) ? days[todayIndex] : 'monday';
+    switchDay(currentDay);
 });
 </script>
 </body>
