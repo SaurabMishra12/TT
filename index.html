@@ -9,13 +9,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         /* I've heroically fixed the CSS. Please, hold your applause. */
+        /* ✨ ENHANCED COLORS - A more modern and vibrant theme ✨ */
         :root {
-            --bg-light: #f8f9fa; --bg-dark: #202124;
-            --text-light: #202124; --text-dark: #e8eaed;
-            --card-light: #ffffff; --card-dark: #303134;
-            --border-light: #dadce0; --border-dark: #3c4043;
-            --primary-light: #1a73e8; --primary-dark: #8ab4f8;
-            --sidebar-bg-light: #e9eef6; --sidebar-bg-dark: #282a2d;
+            --bg-light: #f8fafc; --bg-dark: #0f172a;
+            --text-light: #1e293b; --text-dark: #e2e8f0;
+            --card-light: #ffffff; --card-dark: #1e293b;
+            --border-light: #e2e8f0; --border-dark: #334155;
+            --primary-light: #4f46e5; --primary-dark: #a5b4fc;
+            --sidebar-bg-light: #f1f5f9; --sidebar-bg-dark: #1a2336;
         }
         html.dark { color-scheme: dark; }
         body { font-family: 'Roboto', sans-serif; background-color: var(--bg-light); color: var(--text-light); transition: background-color 0.3s ease, color 0.3s ease; }
@@ -23,7 +24,7 @@
         .google-sans { font-family: 'Google Sans', sans-serif; }
         .sidebar { background-color: var(--sidebar-bg-light); }
         html.dark .sidebar { background-color: var(--sidebar-bg-dark); }
-        .nav-link { transition: background-color 0.2s ease, color 0.2s ease; color: #3c4043; }
+        .nav-link { transition: background-color 0.2s ease, color 0.2s ease; color: #475569; }
         html.dark .nav-link { color: var(--text-dark); }
         .nav-link:hover { background-color: rgba(0,0,0,0.05); }
         html.dark .nav-link:hover { background-color: rgba(255,255,255,0.05); }
@@ -31,16 +32,18 @@
         html.dark .nav-link.active { background-color: var(--primary-dark); color: var(--bg-dark) !important;}
         .timeline-card { background-color: var(--card-light); border: 1px solid var(--border-light); transition: transform 0.2s ease, box-shadow 0.2s ease; }
         html.dark .timeline-card { background-color: var(--card-dark); border-color: var(--border-dark); }
-        .timeline-card:hover { transform: translateY(-4px); box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.1); }
-        html.dark .timeline-card:hover { box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.2); }
+        .timeline-card:hover { transform: translateY(-4px); box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.08); }
+        html.dark .timeline-card:hover { box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.25); }
         .timeline-line { background-color: var(--border-light); }
         html.dark .timeline-line { background-color: var(--border-dark); }
         .timeline-dot { background-color: var(--bg-light); border: 3px solid var(--primary-light); }
         html.dark .timeline-dot { background-color: var(--bg-dark); border-color: var(--primary-dark); }
         .modal-content { background-color: var(--card-light); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         html.dark .modal-content { background-color: var(--card-dark); }
-        .modal-header { background-color: var(--primary-light); }
-        html.dark .modal-header { background-color: var(--primary-dark); color: var(--bg-dark); }
+        .modal-header { background: linear-gradient(to right, var(--primary-light), #6d28d9); }
+        html.dark .modal-header { background: linear-gradient(to right, var(--primary-dark), #9333ea); color: var(--bg-dark); }
+        .text-primary { color: var(--primary-light); }
+        html.dark .text-primary { color: var(--primary-dark); }
 
         /* FIXED DARK MODE TOGGLE - A monumental feat of engineering. */
         .toggle-bg { transition: background-color 0.2s ease; }
@@ -53,36 +56,36 @@
 <body class="antialiased">
 
 <div class="flex flex-col md:flex-row min-h-screen">
-    <aside class="sidebar w-full md:w-64 flex-shrink-0 p-4 border-b md:border-r md:border-b-0 border-gray-200 dark:border-gray-700 flex flex-col">
-        <div class="flex items-center mb-8">
-            <svg class="h-8 w-8 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <aside class="sidebar w-full md:w-64 flex-shrink-0 p-4 border-b md:border-r border-slate-200 dark:border-slate-800 flex flex-col">
+        <div class="flex items-center mb-6 md:mb-8">
+            <svg class="h-8 w-8 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
             </svg>
-            <h1 class="google-sans text-xl font-bold ml-2 text-gray-800 dark:text-gray-100">-=-</h1>
+            <h1 class="google-sans text-xl font-bold ml-2 text-slate-800 dark:text-slate-100">-=-</h1>
         </div>
-        <nav id="day-navigation" class="flex flex-col gap-2">
-            <a href="#" data-day="monday" class="nav-link text-lg font-medium p-3 rounded-lg flex items-center gap-3"><span class="w-2 h-2 bg-red-400 rounded-full"></span>Mon</a>
-            <a href="#" data-day="tuesday" class="nav-link text-lg font-medium p-3 rounded-lg flex items-center gap-3"><span class="w-2 h-2 bg-orange-400 rounded-full"></span>Tue</a>
-            <a href="#" data-day="wednesday" class="nav-link text-lg font-medium p-3 rounded-lg flex items-center gap-3"><span class="w-2 h-2 bg-yellow-400 rounded-full"></span>Wed</a>
-            <a href="#" data-day="thursday" class="nav-link text-lg font-medium p-3 rounded-lg flex items-center gap-3"><span class="w-2 h-2 bg-green-400 rounded-full"></span>Thu</a>
-            <a href="#" data-day="friday" class="nav-link text-lg font-medium p-3 rounded-lg flex items-center gap-3"><span class="w-2 h-2 bg-blue-400 rounded-full"></span>Fri</a>
+        <nav id="day-navigation" class="flex flex-row md:flex-col gap-1 md:gap-2 -mx-4 px-4 pb-2 overflow-x-auto md:mx-0 md:px-0 md:pb-0 md:overflow-y-auto">
+            <a href="#" data-day="monday" class="nav-link text-lg font-medium p-3 rounded-lg flex items-center gap-3 flex-shrink-0"><span class="w-2 h-2 bg-red-400 rounded-full"></span>Mon</a>
+            <a href="#" data-day="tuesday" class="nav-link text-lg font-medium p-3 rounded-lg flex items-center gap-3 flex-shrink-0"><span class="w-2 h-2 bg-orange-400 rounded-full"></span>Tue</a>
+            <a href="#" data-day="wednesday" class="nav-link text-lg font-medium p-3 rounded-lg flex items-center gap-3 flex-shrink-0"><span class="w-2 h-2 bg-yellow-400 rounded-full"></span>Wed</a>
+            <a href="#" data-day="thursday" class="nav-link text-lg font-medium p-3 rounded-lg flex items-center gap-3 flex-shrink-0"><span class="w-2 h-2 bg-green-400 rounded-full"></span>Thu</a>
+            <a href="#" data-day="friday" class="nav-link text-lg font-medium p-3 rounded-lg flex items-center gap-3 flex-shrink-0"><span class="w-2 h-2 bg-blue-400 rounded-full"></span>Fri</a>
         </nav>
-        <div class="mt-auto p-2">
+        <div class="mt-auto pt-4">
              <label for="dark-mode-toggle" class="flex items-center cursor-pointer">
                  <div class="relative">
                      <input type="checkbox" id="dark-mode-toggle" class="sr-only">
-                     <div class="toggle-bg block bg-gray-300 dark:bg-gray-600 w-11 h-6 rounded-full"></div>
+                     <div class="toggle-bg block bg-slate-300 dark:bg-slate-700 w-11 h-6 rounded-full"></div>
                      <div class="toggle-circle absolute left-1 top-1 bg-white w-4 h-4 rounded-full"></div>
                  </div>
-                 <div class="ml-3 text-gray-700 dark:text-gray-300 font-medium">Useless Mode</div>
+                 <div class="ml-3 text-slate-700 dark:text-slate-300 font-medium">Useless Mode</div>
              </label>
         </div>
     </aside>
 
     <div class="flex-1 flex flex-col overflow-hidden">
-        <header class="p-4 md:p-6 border-b border-gray-200 dark:border-gray-700">
-            <h1 class="google-sans text-2xl md:text-3xl font-bold text-gray-800 dark:text-gray-100">Survival Schedule</h1>
-            <p class="mt-1 text-gray-600 dark:text-gray-400"> yup , I built a class timetable. 💀
+        <header class="p-4 md:p-6 border-b border-slate-200 dark:border-slate-800">
+            <h1 class="google-sans text-2xl md:text-3xl font-bold text-slate-800 dark:text-slate-100">Survival Schedule</h1>
+            <p class="mt-1 text-slate-600 dark:text-slate-400"> yup , I built a class timetable. 💀
 For what?? Vibes?? Anyway, slay I guess.
 But, I built this for some reason... probably so I actually go to class. 🤷‍♂️</p>
         </header>
@@ -95,7 +98,7 @@ But, I built this for some reason... probably so I actually go to class. 🤷‍
     </div>
 </div>
 
-<div id="courseModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-opacity duration-300">
+<div id="courseModal" class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-opacity duration-300">
     <div class="modal-content w-full max-w-2xl max-h-[90vh] rounded-xl shadow-2xl overflow-hidden flex flex-col transform scale-95">
         <div class="modal-header flex justify-between items-center p-4 text-white">
             <h2 id="modalTitle" class="google-sans text-2xl font-bold">Course Details</h2>
@@ -103,18 +106,18 @@ But, I built this for some reason... probably so I actually go to class. 🤷‍
         </div>
         <div class="p-6 overflow-y-auto space-y-6">
             <div>
-                <h3 class="font-bold text-lg text-blue-600 dark:text-blue-400">Venue</h3>
-                <p id="modalVenue" class="mt-1 text-gray-700 dark:text-gray-300"></p>
+                <h3 class="font-bold text-lg text-primary">Venue</h3>
+                <p id="modalVenue" class="mt-1 text-slate-700 dark:text-slate-300"></p>
             </div>
-            <div class="w-full h-px bg-gray-200 dark:bg-gray-700"></div>
+            <div class="w-full h-px bg-slate-200 dark:border-slate-700"></div>
             <div>
-                <h3 class="font-bold text-lg text-blue-600 dark:text-blue-400">Learning Outcomes</h3>
-                <p id="modalOutcomes" class="mt-1 text-gray-700 dark:text-gray-300 whitespace-pre-wrap"></p>
+                <h3 class="font-bold text-lg text-primary">Learning Outcomes</h3>
+                <p id="modalOutcomes" class="mt-1 text-slate-700 dark:text-slate-300 whitespace-pre-wrap"></p>
             </div>
-             <div class="w-full h-px bg-gray-200 dark:bg-gray-700"></div>
+             <div class="w-full h-px bg-slate-200 dark:border-slate-700"></div>
             <div>
-                <h3 class="font-bold text-lg text-blue-600 dark:text-blue-400">Syllabus</h3>
-                <div id="modalSyllabus" class="mt-1 text-gray-700 dark:text-gray-300 whitespace-pre-wrap prose prose-sm dark:prose-invert"></div>
+                <h3 class="font-bold text-lg text-primary">Syllabus</h3>
+                <div id="modalSyllabus" class="mt-1 text-slate-700 dark:text-slate-300 whitespace-pre-wrap prose prose-sm dark:prose-invert max-w-none"></div>
             </div>
         </div>
     </div>
@@ -140,16 +143,16 @@ document.addEventListener('DOMContentLoaded', () => {
         return `
             <div class="text-center p-8">
                 <h2 class="google-sans text-2xl font-bold mb-2">It's a free day. Miracles do happen.</h2>
-                <p class="text-gray-600 dark:text-gray-400 mb-8">Here are some completely arbitrary metrics to make you feel productive.</p>
+                <p class="text-slate-600 dark:text-slate-400 mb-8">Here are some completely arbitrary metrics to make you feel productive.</p>
                 <div class="grid md:grid-cols-2 gap-6 text-left">
-                    <div class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700">
+                    <div class="p-4 bg-white dark:bg-slate-800 rounded-lg shadow-md border border-slate-200 dark:border-slate-700">
                         <h3 class="font-bold text-lg text-purple-600 dark:text-purple-400">Useless Fun Fact</h3>
                         <p class="mt-2">A day on Venus is longer than a year on Venus. Think about that next time you feel your day is dragging.</p>
                     </div>
-                    <div class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700">
+                    <div class="p-4 bg-white dark:bg-slate-800 rounded-lg shadow-md border border-slate-200 dark:border-slate-700">
                         <h3 class="font-bold text-lg text-green-600 dark:text-green-400">Productivity Score™</h3>
                         <p class="mt-2 text-sm">Your current productivity is... <span class="font-bold">42%</span>. Why? Because the number looked nice.</p>
-                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 mt-2">
+                        <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2.5 mt-2">
                             <div class="bg-green-500 h-2.5 rounded-full" style="width: 42%"></div>
                         </div>
                     </div>
@@ -162,7 +165,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const events = scheduleData[day];
         if (!events || events.length === 0) return generateWelcomeScreenHTML();
         
-        // [MODIFIED] Adjusted timeline padding and dot positioning for mobile.
         let timelineHTML = `<div class="relative pl-6 sm:pl-8"><div class="timeline-line absolute left-4 top-4 bottom-4 w-0.5"></div>`;
         events.forEach((event, index) => {
             const details = event.code ? courseDetails[event.code] : { title: event.title };
@@ -177,9 +179,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="flex items-start gap-4">
                             <div class="hidden sm:block mt-1">${icons[event.type] || icons.lecture}</div>
                             <div class="flex-grow">
-                                <p class="font-bold text-gray-500 dark:text-gray-400">${event.time}</p>
-                                <h3 class="google-sans text-xl font-bold text-gray-900 dark:text-gray-100">${title}</h3>
-                                ${event.code ? `<p class="text-sm text-gray-600 dark:text-gray-400">${event.code} &bull; ${event.venue}</p>` : `<p class="text-sm text-gray-600 dark:text-gray-400">Eat. Sleep. Or just stare at a wall.</p>`}
+                                <p class="font-bold text-sm text-slate-500 dark:text-slate-400">${event.time}</p>
+                                <h3 class="google-sans text-xl font-bold text-slate-900 dark:text-slate-100">${title}</h3>
+                                ${event.code ? `<p class="text-sm text-slate-600 dark:text-slate-400">${event.code} &bull; ${event.venue}</p>` : `<p class="text-sm text-slate-600 dark:text-slate-400">Eat. Sleep. Or just stare at a wall.</p>`}
                             </div>
                         </div>
                     </div>
